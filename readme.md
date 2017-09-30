@@ -18,6 +18,7 @@ For more information on how to this works with other frontends/backends, head ov
 3. Install dependencies, just run in project folder: `npm i` or `yarn`
 
 ## Usage
+0. run `npm run transpile:w` to watching and transpiring ts to js files
 1. run `npm start` to start server
 
 ## Testing

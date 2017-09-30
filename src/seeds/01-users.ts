@@ -1,6 +1,6 @@
-const bcrypt = require('bcrypt')
-const faker = require('faker')
-const config = require('../config')
+import * as bcrypt from 'bcrypt';
+import * as faker from 'faker';
+import { config } from '../config';
 
 const users = [
   {
@@ -20,7 +20,7 @@ const users = [
     email: 'john@jacob.com',
     id: '52e1cc10-20b9-4cf2-ad94-3b0c135d35a5'
   }
-]
+];
 
 function getUsers () {
   return users.map(u => {
@@ -33,8 +33,8 @@ function getUsers () {
       image: faker.image.avatar(),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
-    }
-  })
+    };
+  });
 }
 
 exports.getUsers = getUsers

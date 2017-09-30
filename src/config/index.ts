@@ -1,13 +1,15 @@
-const path = require('path')
-const _ = require('lodash')
-const knexfile = require('./knexfile')
+// const path = require('path')
+import * as path from 'path';
+import * as _ from 'lodash';
+// const knexfile = require('./knexfile')
+import { knexfile } from './knexfile';
 
-const ROOT = path.resolve(__dirname, '../')
-const NODE_ENV = _.defaultTo(process.env.NODE_ENV, 'development')
+const ROOT: string = path.resolve(__dirname, '../');
+const NODE_ENV = _.defaultTo(process.env.NODE_ENV, 'development');
 
-const isProd = NODE_ENV === 'production'
-const isTest = NODE_ENV === 'test'
-const isDev = NODE_ENV === 'development'
+const isProd: boolean = NODE_ENV === 'production';
+const isTest: boolean = NODE_ENV === 'test';
+const isDev: boolean = NODE_ENV === 'development';
 
 export const config = {
   server: {
@@ -51,12 +53,12 @@ function normalizePort (val) {
   var port = parseInt(val, 10)
 
   if (isNaN(port)) {
-    return val
+    return val;
   }
 
   if (port >= 0) {
-    return port
+    return port;
   }
 
-  return false
+  return false;
 }

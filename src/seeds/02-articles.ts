@@ -1,9 +1,9 @@
-const faker = require('faker')
-const _ = require('lodash')
-const uuid = require('uuid')
-const slug = require('slug')
-const {subMonths} = require('date-fns')
-const config = require('../config')
+import * as faker from 'faker';
+import * as _ from 'lodash';
+import * as uuid from 'uuid';
+import * as slug from 'slug';
+const {subMonths} = require('date-fns');
+import { config } from '../config';
 const {getUsers} = require('./01-users')
 
 function getArticles (users) {

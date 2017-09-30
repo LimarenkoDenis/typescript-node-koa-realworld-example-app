@@ -8,7 +8,7 @@ import {getSelect} from '../lib/utils';
 import {commentFields, userFields, relationsMaps} from '../lib/relations-map';
 const joinJs = require('join-js').default
 
-module.exports = {
+export const comments = {
 
   async byComment (comment, ctx, next) {
     if (!comment) {
@@ -67,7 +67,7 @@ module.exports = {
     comment.author = user.id
     comment.article = article.id
 
-    comment = await ctx.app.schemas.comment.validate(comment, opts)
+    comment = await ctx.app.schemas.commentSchema.validate(comment, opts)
 
     await ctx.app.db('comments').insert(humps.decamelizeKeys(comment))
 

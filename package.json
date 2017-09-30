@@ -1,28 +1,22 @@
 {
-  "name": "node-koa-realworld-starter-kit",
-  "version": "1.0.0",
-  "description": "conduit on koa.js",
+  "name": "typescript-node-koa-realworld-example-app",
+  "version": "0.0.1",
+  "description": "conduit on typescript with koa.js",
   "main": "index.js",
-  "repository": "git@github.com:dimonnwc3/node-koa-realworld-starter-kit.git",
-  "author": "Dmitrii Solovev <dimonnwc3@gmail.com>",
+  "repository": "git@github.com:LimarenkoDenis/typescript-node-koa-realworld-example-app",
+  "authors": ["Dmitrii Solovev <dimonnwc3@gmail.com>, Limarenkode Denis<limarenkodenis@gmail.com>"],
   "license": "ISC",
   "scripts": {
-    "transpile": "tsc -p ./tsconfig.dev.json",
     "transpile:w": "tsc -p ./tsconfig.dev.json -w",
-    "build": "rm -rf ./dist/ && tsc -p ./tsconfig.prod.json",
-    "dev-serve": "nodemon ./dist/app.js",
-    "dev-serve-debug": "nodemon --inspect=0.0.0.0:5858  --verbose ./dist/app.js",
     "lint": "tslint './src/**/*.ts'",
     "start": "cross-env NODE_PATH=src node dist/bin/server.js",
     "db:load": "knex seed:run --knexfile src/config/knexfile.js",
     "lint:fix": "standard --fix | snazzy",
     "test": "jest",
     "test:watch": "jest --watch",
-    "start1": "npm run transpile:w && npm start",
     "dev": "concurrently --kill-others \"npm run transpile:w\" \"npm run start\""
   },
   "pre-commit": [
-    "lint"
   ],
   "dependencies": {
     "bcrypt": "^1.0.2",
@@ -54,11 +48,19 @@
     "yup": "^0.21.3"
   },
   "devDependencies": {
+    "@types/koa-helmet": "^3.1.1",
+    "@types/bcrypt": "^1.0.0",
     "@types/cors": "^2.8.1",
     "@types/dotenv": "^4.0.1",
+    "@types/faker": "^4.1.1",
+    "@types/humps": "^1.1.2",
     "@types/kcors": "^2.2.1",
+    "@types/koa": "^2.0.39",
     "@types/koa-bodyparser": "^3.0.25",
+    "@types/koa-logger": "^2.0.2",
     "@types/lodash": "^4.14.76",
+    "@types/slug": "^0.9.0",
+    "@types/uuid": "^3.4.2",
     "concurrently": "^3.5.0",
     "faker": "^4.1.0",
     "jest": "^20.0.4",

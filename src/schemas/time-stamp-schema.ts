@@ -1,7 +1,7 @@
 const yup = require('yup')
 const isISO8601 = require('validator/lib/isISO8601').default
 
-const timeStampsSchema = yup.object().shape({
+export const timeStampSchema = yup.object().shape({
 
   createdAt: yup.string()
     .required()
@@ -34,4 +34,4 @@ const timeStampsSchema = yup.object().shape({
 })
   .noUnknown()
 
-module.exports = timeStampsSchema
+// module.exports = timeStampsSchema

@@ -1,66 +1,49 @@
-// const config = require('config')
 import { config } from './config';
-const http = require('http')
-const Koa = require('koa')
-
-const app = new Koa()
-
-app.keys = [config.secret]
-
-// require('schemas')(app)
+import * as http from 'http';
+import * as Koa from 'koa';
+import * as koaHelmet from 'koa-helmet';
+import * as KoaLogger from 'koa-logger';
+import { router } from './routes';
 import { schemas } from  './schemas';
+import * as cors from 'kcors';
+import * as bodyParser  from 'koa-bodyparser';
+
+const app = new Koa();
 schemas(app);
 
-const responseTime = require('koa-response-time')
-const helmet = require('koa-helmet')
-const logger = require('koa-logger')
-// const camelizeMiddleware = require('middleware/camelize-middleware')
+app.keys = [config.secret];
+
+const responseTime = require('koa-response-time');
+
 import { camelizeMiddleware } from './middleware/camelize-middleware';
 import { error } from './middleware/error-middleware';
-
-// const error = require('middleware/error-middleware')
-// const db = require('middleware/db-middleware')
 import { db } from './middleware/db-middleware';
-
-// const cors = require('kcors')
-import * as cors from 'kcors';
-
-// const jwt = require('middleware/jwt-middleware')
 import { jwt } from './middleware/jwt-middleware';
-
-// const bodyParser = require('koa-bodyparser');
-import * as bodyParser  from 'koa-bodyparser';
-// const pagerMiddleware = require('middleware/pager-middleware')
 import { pagerMiddleware } from './middleware/pager-middleware';
-
-// const userMiddleware = require('middleware/user-middleware')
 import { userMiddleware } from './middleware/user-middleware';
 
-// const routes = require('routes')
-import { router } from './routes';
-
 if (!config.env.isTest) {
-  app.use(responseTime())
-  app.use(helmet())
+  app.use(responseTime());
+  app.use(koaHelmet());
 }
 
-app.use(logger())
+app.use(KoaLogger());
 
-app.use(camelizeMiddleware)
+app.use(camelizeMiddleware);
 
-app.use(error)
-app.use(db(app))
+app.use(error);
+app.use(db(app));
 app.use(cors(config.cors));
-app.use(jwt)
-app.use(bodyParser(config.bodyParser))
+app.use(jwt);
+app.use(bodyParser(config.bodyParser));
 
-app.use(userMiddleware)
-app.use(pagerMiddleware)
+app.use(userMiddleware);
+app.use(pagerMiddleware);
 
-app.use(router.routes())
-app.use(router.allowedMethods())
+app.use(router.routes());
+app.use(router.allowedMethods());
 
-app.server = require('http-shutdown')(http.createServer(app.callback()))
+app.server = require('http-shutdown')(http.createServer(app.callback()));
 
 app.shutDown = function shutDown () {
   let err
@@ -84,4 +67,4 @@ app.shutDown = function shutDown () {
   }
 }
 
-module.exports = app
+module.exports = app;

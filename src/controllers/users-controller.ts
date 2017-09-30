@@ -21,9 +21,11 @@ export const users = {
     const opts = {abortEarly: false, context: {validatePassword: true}}
 
     user.id = uuid()
-
-    user = await ctx.app.schemas.user.validate(user, opts)
-
+    console.log(user);
+    console.log(ctx.app.schemas);
+    
+    user = await ctx.app.schemas.userSchema.validate(user, opts)
+    console.log(user);
     user.password = await bcrypt.hash(user.password, 10)
 
     await ctx.app.db('users').insert(humps.decamelizeKeys(user))
@@ -43,7 +45,9 @@ export const users = {
     }
 
     let user = Object.assign({}, ctx.state.user, fields)
-    user = await ctx.app.schemas.user.validate(user, opts)
+    console.log(user);
+    
+    user = await ctx.app.schemas.userSchema.validate(user, opts)
 
     if (fields.password) {
       user.password = await bcrypt.hash(user.password, 10)

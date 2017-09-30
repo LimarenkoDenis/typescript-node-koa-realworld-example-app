@@ -1,16 +1,12 @@
-const slug = require('slug')
-const uuid = require('uuid')
-const humps = require('humps')
-const _ = require('lodash')
-const comments = require('./comments-controller')
-// const {ValidationError} = require('lib/errors')
-import {errors} from '../lib/errors';
+import * as slug from 'slug';
+import * as uuid from 'uuid';
+import * as humps from 'humps';
+import * as _  from 'lodash';
+import { comments } from './comments-controller';
+import { errors } from '../lib/errors';
+import { getSelect } from '../lib/utils';
+import { articleFields, relationsMaps, userFields } from '../lib/relations-map';
 
-// const {getSelect} = require('lib/utils')
-import {getSelect} from '../lib/utils';
-
-// const {articleFields, userFields, relationsMaps} = require('lib/relations-map')
-import {articleFields, userFields, relationsMaps} from '../lib/relations-map';
 const joinJs = require('join-js').default
 
 export const articles = {
@@ -185,7 +181,7 @@ export const articles = {
     article.id = uuid()
     article.author = ctx.state.user.id
 
-    article = await ctx.app.schemas.article.validate(article, opts)
+    article = await ctx.app.schemas.articleSchema.validate(article, opts)
 
     article.slug = slug(_.get(article, 'title', ''), {lower: true})
 
@@ -193,7 +189,7 @@ export const articles = {
       tags = await Promise.all(
         article.tagList
           .map(t => ({id: uuid(), name: t}))
-          .map(t => ctx.app.schemas.tag.validate(t, opts))
+          .map(t => ctx.app.schemas.tagsSchema.validate(t, opts))
       )
     }
 
@@ -255,7 +251,7 @@ export const articles = {
 
     let newArticle = Object.assign({}, article, fields)
     newArticle.author = newArticle.author.id
-    newArticle = await ctx.app.schemas.article.validate(
+    newArticle = await ctx.app.schemas.articleSchema.validate(
       humps.camelizeKeys(newArticle),
       opts
     )
@@ -307,7 +303,7 @@ export const articles = {
         let tags = await Promise.all(
           newArticle.tagList
             .map(t => ({id: uuid(), name: t}))
-            .map(t => ctx.app.schemas.tag.validate(t, opts))
+            .map(t => ctx.app.schemas.tagsSchema.validate(t, opts))
         )
 
         for (var i = 0; i < tags.length; i++) {

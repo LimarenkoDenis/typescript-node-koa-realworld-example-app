@@ -1,5 +1,6 @@
 const yup = require('yup')
-const timeStampSchema = require('./time-stamp-schema')
+// const timeStampSchema = require('./time-stamp-schema')
+import { timeStampSchema } from './time-stamp-schema';
 const isUUID = require('validator/lib/isUUID')
 
 export const userSchema = yup.object().shape({

@@ -1,8 +1,10 @@
-const path = require('path')
-const ROOT = path.resolve(__dirname, '../../')
-require('dotenv').config({path: path.join(ROOT, '.env')})
+import * as path from 'path';
 
-const {DB_CLIENT, DB_CONNECTION} = process.env
+const ROOT: string = path.resolve(__dirname, '../../');
+import * as dotenv from 'dotenv';
+dotenv.config({path: path.join(ROOT, '.env')});
+
+const { DB_CLIENT, DB_CONNECTION } = process.env;
 
 const options = {
   client: DB_CLIENT || 'sqlite3',
@@ -16,16 +18,16 @@ const options = {
     directory: path.join(ROOT, 'src/seeds')
   },
   useNullAsDefault: !DB_CLIENT || DB_CLIENT === 'sqlite3'
-}
+};
 
 if (DB_CLIENT && DB_CLIENT !== 'sqlite3') {
   options.pool = {
     min: 2,
     max: 10
-  }
+  };
 }
 
-module.exports = {
+export const knexfile = {
 
   development: Object.assign({}, options),
 
@@ -37,4 +39,4 @@ module.exports = {
     connection: DB_CONNECTION || path.join(ROOT, 'data/prod.sqlite3')
   })
 
-}
+};

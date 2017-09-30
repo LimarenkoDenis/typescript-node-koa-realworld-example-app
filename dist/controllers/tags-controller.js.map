@@ -1,1 +1,0 @@
-{"version":3,"file":"tags-controller.js","sourceRoot":"","sources":["../../src/controllers/tags-controller.ts"],"names":[],"mappings":";;;;;;;;;;AAAa,QAAA,IAAI,GAAG;IACZ,GAAG,CAAE,GAAG;;YACZ,MAAM,IAAI,GAAG,MAAM,GAAG,CAAC,GAAG,CAAC,EAAE,CAAC,MAAM,CAAC,CAAC,KAAK,CAAC,MAAM,CAAC,CAAA;YAEnD,GAAG,CAAC,IAAI,GAAG,EAAC,IAAI,EAAC,CAAA;QACnB,CAAC;KAAA;CACF,CAAA"}
