@@ -1,0 +1,1 @@
+{"version":3,"file":"tags-router.js","sourceRoot":"","sources":["../../src/routes/tags-router.ts"],"names":[],"mappings":";;AAAA,sEAAwD;AACxD,MAAM,MAAM,GAAG,OAAO,CAAC,YAAY,CAAC,CAAA;AACpC,2CAA2C;AAC3C,MAAM,MAAM,GAAG,IAAI,MAAM,EAAE,CAAA;AAE3B,MAAM,CAAC,GAAG,CAAC,OAAO,EAAE,sBAAI,CAAC,GAAG,CAAC,CAAA;AAEhB,QAAA,UAAU,GAAG,MAAM,CAAC,MAAM,EAAE,CAAA;AACzC,mCAAmC"}

@@ -7,12 +7,19 @@
   "author": "Dmitrii Solovev <dimonnwc3@gmail.com>",
   "license": "ISC",
   "scripts": {
-    "start": "cross-env NODE_PATH=src node src/bin/server.js",
+    "transpile": "tsc -p ./tsconfig.dev.json",
+    "transpile:w": "tsc -p ./tsconfig.dev.json -w",
+    "build": "rm -rf ./dist/ && tsc -p ./tsconfig.prod.json",
+    "dev-serve": "nodemon ./dist/app.js",
+    "dev-serve-debug": "nodemon --inspect=0.0.0.0:5858  --verbose ./dist/app.js",
+    "lint": "tslint './src/**/*.ts'",
+    "start": "cross-env NODE_PATH=src node dist/bin/server.js",
     "db:load": "knex seed:run --knexfile src/config/knexfile.js",
-    "lint": "standard | snazzy",
     "lint:fix": "standard --fix | snazzy",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "start1": "npm run transpile:w && npm start",
+    "dev": "concurrently --kill-others \"npm run transpile:w\" \"npm run start\""
   },
   "pre-commit": [
     "lint"
@@ -47,11 +54,20 @@
     "yup": "^0.21.3"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.1",
+    "@types/dotenv": "^4.0.1",
+    "@types/kcors": "^2.2.1",
+    "@types/koa-bodyparser": "^3.0.25",
+    "@types/lodash": "^4.14.76",
+    "concurrently": "^3.5.0",
     "faker": "^4.1.0",
     "jest": "^20.0.4",
+    "nodemon": "1.12.1",
     "pre-commit": "^1.2.2",
     "snazzy": "^7.0.0",
-    "standard": "^10.0.2"
+    "standard": "^10.0.2",
+    "tslint": "5.7.0",
+    "typescript": "2.5.2"
   },
   "jest": {
     "testPathIgnorePatterns": [
