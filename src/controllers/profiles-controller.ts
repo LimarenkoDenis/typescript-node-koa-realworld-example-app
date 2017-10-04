@@ -1,10 +1,7 @@
-const _ = require('lodash')
-const uuid = require('uuid')
-
-// const {getSelect} = require('lib/utils')
-import {getSelect} from '../lib/utils';
-
-import {userFields, relationsMaps} from '../lib/relations-map';
+import * as _ from 'lodash';
+import * as uuid from 'uuid';
+import { getSelect } from '../lib/utils';
+import { relationsMaps, userFields, } from '../lib/relations-map';
 const joinJs = require('join-js').default
 
 export const profiles = {

@@ -1,4 +1,4 @@
-type Comment = {
+type Comments = {
     id: string,
     author: string,
     article: string,

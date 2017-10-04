@@ -1,6 +1,6 @@
-export const userFields = ['id', 'image', 'bio', 'username']
+export const userFields: string[] = ['id', 'image', 'bio', 'username'];
 
-export const articleFields = [
+export const articleFields: string[] = [
   'id',
   'slug',
   'title',
@@ -9,16 +9,16 @@ export const articleFields = [
   'favorites_count',
   'created_at',
   'updated_at'
-]
+];
 
-export const commentFields = [
+export const commentFields: string[] = [
   'id',
   'body',
   'created_at',
   'updated_at'
-]
+];
 
-export const relationsMaps = [
+export const relationsMaps: any = [
   {
     mapId: 'articleMap',
     idProperty: 'id',
@@ -48,9 +48,4 @@ export const relationsMaps = [
     idProperty: 'id',
     properties: ['id', 'name']
   }
-]
-
-// exports.relationsMaps = relationsMaps
-// exports.userFields = userFields
-// exports.articleFields = articleFields
-// exports.commentFields = commentFields
+];

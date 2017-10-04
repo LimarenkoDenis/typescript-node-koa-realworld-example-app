@@ -1,13 +1,13 @@
+import * as Router from 'koa-router';
 import { profiles } from './../controllers/profiles-controller';
-const Router = require('koa-router')
-const router = new Router()
-
 import { authMiddleware } from '../middleware/auth-required-middleware';
 
-router.param('username', profiles.byUsername)
+const router: Router = new Router();
 
-router.get('/profiles/:username', profiles.get)
-router.post('/profiles/:username/follow', authMiddleware, profiles.follow.post)
-router.del('/profiles/:username/follow', authMiddleware, profiles.follow.del)
+router.param('username', profiles.byUsername);
 
-export const profilesRoutes = router.routes()
+router.get('/profiles/:username', profiles.get);
+router.post('/profiles/:username/follow', authMiddleware, profiles.follow.post);
+router.del('/profiles/:username/follow', authMiddleware, profiles.follow.del);
+
+export const profilesRoutes: Router.IMiddleware = router.routes();

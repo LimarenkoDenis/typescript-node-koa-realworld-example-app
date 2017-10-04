@@ -1,12 +1,10 @@
-const humps = require('humps')
-const uuid = require('uuid')
-const _ = require('lodash')
-const bcrypt = require('bcrypt')
-// const {ValidationError} = require('lib/errors')
-import {errors} from '../lib/errors';
+import * as humps from 'humps';
+import * as _ from 'lodash';
+import * as uuid from 'uuid';
+import * as bcrypt from 'bcrypt';
+import { errors } from '../lib/errors';
+import { generateJWTforUser } from '../lib/utils';
 
-// const {generateJWTforUser} = require('lib/utils')
-import {generateJWTforUser} from '../lib/utils';
 export const users = {
 
   async get (ctx) {

@@ -2,9 +2,9 @@ import * as faker from 'faker';
 import * as _ from 'lodash';
 import * as uuid from 'uuid';
 import * as slug from 'slug';
-const {subMonths} = require('date-fns');
+import { subMonths } from 'date-fns';
 import { config } from '../config';
-const {getUsers} = require('./01-users')
+import { getUsers } from './01-users';
 
 function getArticles (users) {
   return _.flatMap(users, function (user) {

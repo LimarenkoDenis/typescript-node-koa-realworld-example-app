@@ -1,19 +1,12 @@
 import { config } from './config';
-import * as http from 'http';
 import * as Koa from 'koa';
 import * as koaHelmet from 'koa-helmet';
 import * as KoaLogger from 'koa-logger';
-import { router } from './routes';
-import { schemas } from  './schemas';
 import * as cors from 'kcors';
 import * as bodyParser  from 'koa-bodyparser';
 
-const app = new Koa();
-schemas(app);
-
-app.keys = [config.secret];
-
-const responseTime = require('koa-response-time');
+import { router } from './routes';
+import { schemas } from  './schemas';
 
 import { camelizeMiddleware } from './middleware/camelize-middleware';
 import { error } from './middleware/error-middleware';
@@ -22,8 +15,12 @@ import { jwt } from './middleware/jwt-middleware';
 import { pagerMiddleware } from './middleware/pager-middleware';
 import { userMiddleware } from './middleware/user-middleware';
 
+const app = new Koa();
+schemas(app);
+
+app.keys = [config.secret];
+
 if (!config.env.isTest) {
-  app.use(responseTime());
   app.use(koaHelmet());
 }
 
@@ -43,28 +40,8 @@ app.use(pagerMiddleware);
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-app.server = require('http-shutdown')(http.createServer(app.callback()));
+app.listen(config.server.port, config.server.host, () => {
+  // tslint:disable-next-line
+  console.log(`Listening ${config.server.host}:${config.server.port}`);
+});
 
-app.shutDown = function shutDown () {
-  let err
-
-  console.log('Shutdown')
-
-  if (this.server.listening) {
-    this.server.shutdown(error => {
-      if (error) {
-        console.error(error)
-        err = error
-      }
-
-      this.db.destroy()
-        .catch(error => {
-          console.error(error)
-          err = error
-        })
-        .then(() => process.exit(err ? 1 : 0))
-    })
-  }
-}
-
-module.exports = app;

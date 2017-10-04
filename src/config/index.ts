@@ -1,17 +1,15 @@
-// const path = require('path')
 import * as path from 'path';
 import * as _ from 'lodash';
-// const knexfile = require('./knexfile')
 import { knexfile } from './knexfile';
 
 const ROOT: string = path.resolve(__dirname, '../');
-const NODE_ENV = _.defaultTo(process.env.NODE_ENV, 'development');
+const NODE_ENV: string = _.defaultTo(process.env.NODE_ENV, 'development');
 
 const isProd: boolean = NODE_ENV === 'production';
 const isTest: boolean = NODE_ENV === 'test';
 const isDev: boolean = NODE_ENV === 'development';
 
-export const config = {
+export const config: any = {
   server: {
     port: normalizePort(_.defaultTo(process.env.PORT, 3000)),
     host: _.defaultTo(process.env.HOST, 'localhost'),
@@ -49,8 +47,8 @@ export const config = {
   }
 }
 
-function normalizePort (val) {
-  var port = parseInt(val, 10)
+function normalizePort (val: string) {
+  const port: number = parseInt(val, 10);
 
   if (isNaN(port)) {
     return val;

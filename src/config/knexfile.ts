@@ -1,12 +1,12 @@
 import * as path from 'path';
+import * as dotenv from 'dotenv';
 
 const ROOT: string = path.resolve(__dirname, '../../');
-import * as dotenv from 'dotenv';
 dotenv.config({path: path.join(ROOT, '.env')});
 
 const { DB_CLIENT, DB_CONNECTION } = process.env;
-
-const options = {
+// tslint:disable-next-line
+const options: any = {
   client: DB_CLIENT || 'sqlite3',
   connection: DB_CONNECTION || path.join(ROOT, 'data/dev.sqlite3'),
   migrations: {
@@ -27,7 +27,8 @@ if (DB_CLIENT && DB_CLIENT !== 'sqlite3') {
   };
 }
 
-export const knexfile = {
+// tslint:disable-next-line
+export const knexfile: any = {
 
   development: Object.assign({}, options),
 

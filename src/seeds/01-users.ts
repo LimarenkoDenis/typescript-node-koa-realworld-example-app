@@ -22,7 +22,7 @@ const users = [
   }
 ];
 
-function getUsers () {
+export function getUsers () {
   return users.map(u => {
     return {
       id: u.id,
@@ -36,8 +36,6 @@ function getUsers () {
     };
   });
 }
-
-exports.getUsers = getUsers
 
 exports.seed = async function (knex) {
   if (config.env.isProd) {

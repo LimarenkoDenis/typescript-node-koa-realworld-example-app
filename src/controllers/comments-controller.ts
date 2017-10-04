@@ -1,11 +1,8 @@
-const humps = require('humps')
-const uuid = require('uuid')
-const _ = require('lodash')
-// const {getSelect} = require('lib/utils')
-import {getSelect} from '../lib/utils';
-
-// const {commentFields, userFields, relationsMaps} = require('lib/relations-map')
-import {commentFields, userFields, relationsMaps} from '../lib/relations-map';
+import * as humps from 'humps';
+import * as _ from 'lodash';
+import * as uuid from 'uuid';
+import { getSelect } from '../lib/utils';
+import { commentFields, relationsMaps, userFields } from '../lib/relations-map';
 const joinJs = require('join-js').default
 
 export const comments = {

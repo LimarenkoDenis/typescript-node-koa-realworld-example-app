@@ -1,9 +1,8 @@
-const yup = require('yup')
-// const timeStampSchema = require('./time-stamp-schema')
+const yup = require('yup');
 import { timeStampSchema } from './time-stamp-schema';
-const isUUID = require('validator/lib/isUUID')
+const isUUID = require('validator/lib/isUUID');
 
-export const tagSchema = yup.object().shape({
+export const tagSchema: any = yup.object().shape({
 
   id: yup.string()
     .test({
@@ -19,5 +18,5 @@ export const tagSchema = yup.object().shape({
 
 })
   .noUnknown()
-  .concat(timeStampSchema)
+  .concat(timeStampSchema);
 

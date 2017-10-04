@@ -1,7 +1,8 @@
+import * as Router from 'koa-router';
 import { tags } from './../controllers/tags-controller';
-const Router = require('koa-router')
-const router = new Router()
 
-router.get('/tags', tags.get)
+const router: Router = new Router();
 
-export const tagsRoutes = router.routes()
+router.get('/tags', tags.get);
+
+export const tagsRoutes: Router.IMiddleware = router.routes();

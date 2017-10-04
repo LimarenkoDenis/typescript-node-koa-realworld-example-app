@@ -1,6 +1,5 @@
-// const config = require('config')
 import { config } from './../config';
-const fs = require('fs')
+import * as fs from 'fs';
 
 export const db = function (app) {
   if (config.db.client === 'sqlite3') {
@@ -25,9 +24,9 @@ export const db = function (app) {
 
   return async function (ctx, next) {
     if (ctx.app.migration && promise) {
-      await promise
+      await promise;
     }
 
-    return next()
-  }
+    return next();
+  };
 }

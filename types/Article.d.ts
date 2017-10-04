@@ -1,4 +1,4 @@
-type Aticle = {
+export type Aticle = {
     id: string,
     author: string,
     slug: string,

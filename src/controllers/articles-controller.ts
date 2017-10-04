@@ -6,88 +6,89 @@ import { comments } from './comments-controller';
 import { errors } from '../lib/errors';
 import { getSelect } from '../lib/utils';
 import { articleFields, relationsMaps, userFields } from '../lib/relations-map';
+import * as Koa from 'koa';
 
-const joinJs = require('join-js').default
+const joinJs = require('join-js').default;
 
 export const articles = {
 
-  async bySlug (slug, ctx, next) {
+  async bySlug (slug, ctx: Koa.Context, next: Function): Promise<void> {
     if (!slug) {
-      ctx.throw(404)
+      ctx.throw(404);
     }
 
     const article = await ctx.app.db('articles')
       .first()
-      .where({slug})
+      .where({slug});
 
     if (!article) {
-      ctx.throw(404)
+      ctx.throw(404);
     }
 
     const tagsRelations = await ctx.app.db('articles_tags')
       .select()
-      .where({article: article.id})
+      .where({article: article.id});
 
-    let tagList = []
+    let tagList: string[] = [];
 
     if (tagsRelations && tagsRelations.length > 0) {
       tagList = await ctx.app.db('tags')
         .select()
-        .whereIn('id', tagsRelations.map(r => r.tag))
+        .whereIn('id', tagsRelations.map((r) => r.tag));
 
-      tagList = tagList.map(t => t.name)
+      tagList = tagList.map(t => t.name);
     }
 
-    article.tagList = tagList
+    article.tagList = tagList;
 
-    article.favorited = false
+    article.favorited = false;
 
-    const author = await ctx.app.db('users')
+    const author: string = await ctx.app.db('users')
       .first('username', 'bio', 'image', 'id')
-      .where({id: article.author})
+      .where({id: article.author});
 
-    article.author = author
+    article.author = author;
 
-    article.author.following = false
+    article.author.following = false;
 
-    const {user} = ctx.state
+    const {user} = ctx.state;
 
     if (user && user.username !== article.author.username) {
       const res = await ctx.app.db('followers')
         .where({user: article.author.id, follower: user.id})
-        .select()
+        .select();
 
       if (res.length > 0) {
-        article.author.following = true
+        article.author.following = true;
       }
     }
 
-    let favorites = []
+    let favorites = [];
 
     if (user) {
       favorites = await ctx.app.db('favorites')
         .where({user: user.id, article: article.id})
-        .select()
+        .select();
 
       if (favorites.length > 0) {
-        article.favorited = true
+        article.favorited = true;
       }
     }
 
-    ctx.params.article = article
-    ctx.params.favorites = favorites
-    ctx.params.author = author
-    ctx.params.tagList = tagList
-    ctx.params.tagsRelations = tagsRelations
+    ctx.params.article = article;
+    ctx.params.favorites = favorites;
+    ctx.params.author = author;
+    ctx.params.tagList = tagList;
+    ctx.params.tagsRelations = tagsRelations;
 
-    await next()
+    await next();
 
-    delete ctx.params.author.id
+    delete ctx.params.author.id;
   },
 
-  async get (ctx) {
-    const {user} = ctx.state
-    const {offset, limit, tag, author, favorited} = ctx.query
+  async get (ctx: Koa.Context) {
+    const {user} = ctx.state;
+    const {offset, limit, tag, author, favorited} = ctx.query;
 
     let articlesQuery = ctx.app.db('articles')
       .select(
@@ -102,15 +103,15 @@ export const articles = {
       .offset(offset)
       .orderBy('articles.created_at', 'desc')
 
-    let conutQuery = ctx.app.db('articles').count()
+    let conutQuery: number = ctx.app.db('articles').count();
 
     if (author && author.length > 0) {
       const subQuery = ctx.app.db('users')
         .select('id')
-        .whereIn('username', author)
+        .whereIn('username', author);
 
-      articlesQuery = articlesQuery.andWhere('articles.author', 'in', subQuery)
-      conutQuery = conutQuery.andWhere('articles.author', 'in', subQuery)
+      articlesQuery = articlesQuery.andWhere('articles.author', 'in', subQuery);
+      conutQuery = conutQuery.andWhere('articles.author', 'in', subQuery);
     }
 
     if (favorited && favorited.length > 0) {
@@ -119,10 +120,10 @@ export const articles = {
         .whereIn(
           'user',
           ctx.app.db('users').select('id').whereIn('username', favorited)
-        )
+        );
 
-      articlesQuery = articlesQuery.andWhere('articles.id', 'in', subQuery)
-      conutQuery = conutQuery.andWhere('articles.id', 'in', subQuery)
+      articlesQuery = articlesQuery.andWhere('articles.id', 'in', subQuery);
+      conutQuery = conutQuery.andWhere('articles.id', 'in', subQuery);
     }
 
     if (tag && tag.length > 0) {
@@ -131,10 +132,10 @@ export const articles = {
         .whereIn(
           'tag',
           ctx.app.db('tags').select('id').whereIn('name', tag)
-        )
+        );
 
-      articlesQuery = articlesQuery.andWhere('articles.id', 'in', subQuery)
-      conutQuery = conutQuery.andWhere('articles.id', 'in', subQuery)
+      articlesQuery = articlesQuery.andWhere('articles.id', 'in', subQuery);
+      conutQuery = conutQuery.andWhere('articles.id', 'in', subQuery);
     }
 
     articlesQuery = articlesQuery
@@ -143,67 +144,69 @@ export const articles = {
       .leftJoin('tags', 'articles_tags.tag', 'tags.id')
       .leftJoin('favorites', function () {
         this.on('articles.id', '=', 'favorites.article')
-          .onIn('favorites.user', [user && user.id])
+          .onIn('favorites.user', [user && user.id]);
       })
       .leftJoin('followers', function () {
         this.on('articles.author', '=', 'followers.user')
           .onIn('followers.follower', [user && user.id])
-      })
+      });
 
-    let [articles, [countRes]] = await Promise.all([articlesQuery, conutQuery])
+    let [articles, [countRes]] = await Promise.all([articlesQuery, conutQuery]);
 
+    console.log(joinJs);
+    
     articles = joinJs
       .map(articles, relationsMaps, 'articleMap', 'article_')
       .map(a => {
-        a.favorited = Boolean(a.favorited)
-        a.tagList = a.tagList.map(t => t.name)
-        a.author.following = Boolean(a.author.following)
-        delete a.author.id
-        return a
+        a.favorited = Boolean(a.favorited);
+        a.tagList = a.tagList.map(t => t.name);
+        a.author.following = Boolean(a.author.following);
+        delete a.author.id;
+        return a;
       })
 
-    let articlesCount = countRes.count || countRes['count(*)']
-    articlesCount = Number(articlesCount)
+    let articlesCount = countRes.count || countRes['count(*)'];
+    articlesCount = Number(articlesCount);
 
-    ctx.body = {articles, articlesCount}
+    ctx.body = {articles, articlesCount};
   },
 
-  async getOne (ctx) {
-    ctx.body = {article: ctx.params.article}
+  async getOne (ctx: Koa.Context) {
+    ctx.body = {article: ctx.params.article};
   },
 
   async post (ctx) {
-    const {body} = ctx.request
-    let {article} = body
-    let tags
-    const opts = {abortEarly: false}
+    const {body} = ctx.request;
+    let {article} = body;
+    let tags;
+    const opts = {abortEarly: false};
 
-    article.id = uuid()
-    article.author = ctx.state.user.id
+    article.id = uuid();
+    article.author = ctx.state.user.id;
 
-    article = await ctx.app.schemas.articleSchema.validate(article, opts)
+    article = await ctx.app.schemas.articleSchema.validate(article, opts);
 
-    article.slug = slug(_.get(article, 'title', ''), {lower: true})
+    article.slug = slug(_.get(article, 'title', ''), {lower: true});
 
     if (article.tagList && article.tagList.length > 0) {
       tags = await Promise.all(
         article.tagList
           .map(t => ({id: uuid(), name: t}))
           .map(t => ctx.app.schemas.tagsSchema.validate(t, opts))
-      )
+      );
     }
 
     try {
       await ctx.app.db('articles')
-        .insert(humps.decamelizeKeys(_.omit(article, ['tagList'])))
+        .insert(humps.decamelizeKeys(_.omit(article, ['tagList'])));
     } catch (err) {
       if (Number(err.errno) === 19 || Number(err.code) === 23505) {
-        article.slug = article.slug + '-' + uuid().substr(-6)
+        article.slug = article.slug + '-' + uuid().substr(-6);
 
         await ctx.app.db('articles')
-          .insert(humps.decamelizeKeys(_.omit(article, ['tagList'])))
+          .insert(humps.decamelizeKeys(_.omit(article, ['tagList'])));
       } else {
-        throw err
+        throw err;
       }
     }
 
@@ -451,12 +454,12 @@ export const articles = {
         ctx.app.db('articles')
           .decrement('favorites_count', 1)
           .where({id: article.id})
-      ])
+      ]);
 
-      article.favorited = false
-      article.favorites_count = Number(article.favorites_count) - 1
+      article.favorited = false;
+      article.favorites_count = Number(article.favorites_count) - 1;
 
-      ctx.body = {article: ctx.params.article}
+      ctx.body = {article: ctx.params.article};
     }
 
   },

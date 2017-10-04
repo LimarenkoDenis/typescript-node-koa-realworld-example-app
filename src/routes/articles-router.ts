@@ -1,8 +1,8 @@
+import * as Router from 'koa-router';
 import { articles } from './../controllers/articles-controller';
-const Router = require('koa-router')
-const router = new Router();
-
 import { authMiddleware } from '../middleware/auth-required-middleware';
+
+const router: Router = new Router();
 
 router.param('slug', articles.bySlug);
 router.param('comment', articles.comments.byComment);
@@ -23,4 +23,4 @@ router.get('/articles/:slug/comments', articles.comments.get);
 router.post('/articles/:slug/comments', authMiddleware, articles.comments.post);
 router.del('/articles/:slug/comments/:comment', authMiddleware, articles.comments.del);
 
-export const articleRoutes = router.routes();
+export const articleRoutes: Router.IMiddleware = router.routes();
